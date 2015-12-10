@@ -23,7 +23,7 @@ momentum = 0
 clip_delta = 1.0
 freeze_interval = 10000 #???  no freeze?
 batch_size = 32
-network_type = 'nature_dnn'
+network_type = 'nature_cuda'
 update_rule = 'deepmind_rmsprop' # need update
 batch_accumulator = 'sum'
 rng = np.random.RandomState()
@@ -53,7 +53,6 @@ class experiment():
 
   def run_episode(self,max_steps):
     self.env.reset_game()
-    print 'aja'
     action = self.agent.start_episode(self.env.get_observation())
     #action = self.agent.start_episode(np.random.rand(200,200))
     num_steps = 0
@@ -71,7 +70,7 @@ class experiment():
         break
 
       action = self.agent.step(reward, screen)
-      print action
+      print "Action :", action
     return num_steps
 
 def launch():
@@ -104,7 +103,7 @@ def launch():
   print 'agent done..'
   env = simulator.simulator()
   exp = experiment(agt,env)
-  exp.run_episode(100)
+  exp.run_episode(50)
 
 launch()
 

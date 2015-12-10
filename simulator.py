@@ -1,13 +1,14 @@
 import os,sys
 import Image
 from PIL import Image
+import numpy as np
 
 class simulator():
   def __init__(self):
     self.reward = 0
     #self.screen = np.random.rand(200,200)
-    self.b1 = 1
-    self.b2 = 1
+    self.bar1 = 1
+    self.bar2 = 1
 
   def reset_game(self):
     [bb1, bb2, self.screen] = self.img_feature()
@@ -16,7 +17,7 @@ class simulator():
   def step(self,action):
     os.system('./dqn2control.sh ' + str(action) )
     # play lf2
-    os.system('sleep 2')
+#    os.system('sleep 0.3')
     [bb1, bb2, self.screen] = self.img_feature()
     self.reward = self.bar1 - bb1 - self.bar2 + bb2
 
@@ -33,7 +34,7 @@ class simulator():
     os.system('./capture_window.sh')
 
     img = Image.open('lf2.png')
-    print "Image size :", img.size
+#    print "Image size :", img.size
 
     bar1 = list(img.crop((57, 16, 180, 25)).getdata())
     bar2 = list(img.crop((255, 16, 378, 25)).getdata())
@@ -51,9 +52,10 @@ class simulator():
     bar2 = (blood2*1.0)/maxbar*500  #me
 
     gray = img.crop((0, 108, 793, 549))
-    gray = gray.resize( (200, 200), Image.ANTIALIAS ).convert('L')
+    gray = gray.resize( (100, 100), Image.ANTIALIAS ).convert('L')
     #gray.save('tmp.jpg')
     listgray = list(gray.getdata())  #feature vector
+    listgray = np.reshape(listgray, (100, 100))
     #print listgray  
 
     return bar1, bar2, listgray
