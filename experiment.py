@@ -12,7 +12,7 @@ import q_network
 
 # argparse
 ###### Q NETWORK ######
-input_width, input_height = [84,84]
+input_width, input_height = [200,200]
 num_actions = 10
 phi_length = 4 # phi length?  input 4 frames at once
 discount = 0.95
@@ -38,8 +38,9 @@ update_frequency = 4  #??
 #######################
 
 class experiment():
-  def __init__(self,agent):
+  def __init__(self,agent,env):
     self.agent = agent
+    self.env = env
 
   #def run():
   #  for epoch in xrange(num_epoch):
@@ -51,15 +52,13 @@ class experiment():
   #    num_steps = self.run_episode(steps_left, testing)
 
   def run_episode(self,max_steps):
-    #env.reset_game()
+    self.env.reset_game()
     #action = self.agent.start_episode(self.env.get_observation())
     action = self.agent.start_episode(np.random.rand(84,84))
     num_steps = 0
 
     while True:
-      #[reward, screen] = self.env.step(action)
-      reward = np.random.rand(1)
-      screen = np.random.rand(84,84)
+      [reward, screen] = self.env.step(action)
       #terminal = self.env.game_over()
       terminal = False
       num_steps += 1
