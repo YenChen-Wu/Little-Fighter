@@ -6,13 +6,13 @@ import time
 
 import agent
 import q_network
-#import simulator     # LF2
+import simulator     # LF2
 
 # TODO
 
 # argparse
 ###### Q NETWORK ######
-input_width, input_height = [200,200]
+input_width, input_height = [100,100]
 num_actions = 10
 phi_length = 4 # phi length?  input 4 frames at once
 discount = 0.95
@@ -53,12 +53,15 @@ class experiment():
 
   def run_episode(self,max_steps):
     self.env.reset_game()
-    #action = self.agent.start_episode(self.env.get_observation())
-    action = self.agent.start_episode(np.random.rand(84,84))
+    print 'aja'
+    action = self.agent.start_episode(self.env.get_observation())
+    #action = self.agent.start_episode(np.random.rand(200,200))
     num_steps = 0
 
     while True:
       [reward, screen] = self.env.step(action)
+      #reward = np.random.rand(1)
+      #screen = np.random.rand(200,200)
       #terminal = self.env.game_over()
       terminal = False
       num_steps += 1
@@ -97,9 +100,10 @@ def launch():
                                   replay_start_size,
                                   update_frequency,
                                   rng)
+
   print 'agent done..'
-  #env = simulator()
-  exp = experiment(agt)
+  env = simulator.simulator()
+  exp = experiment(agt,env)
   exp.run_episode(100)
 
 launch()

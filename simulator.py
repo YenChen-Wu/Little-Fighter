@@ -3,32 +3,33 @@ import Image
 from PIL import Image
 
 class simulator():
-  def __init__():
+  def __init__(self):
     self.reward = 0
-    self.screen = np.random.rand(200,200)
+    #self.screen = np.random.rand(200,200)
     self.b1 = 1
     self.b2 = 1
 
-  def reset_game():
+  def reset_game(self):
+    [bb1, bb2, self.screen] = self.img_feature()
     return
 
-  def step(action):
+  def step(self,action):
     os.system('./dqn2control.sh ' + str(action) )
     # play lf2
     os.system('sleep 2')
-    [bb1, bb2, self.screen] = image_feature()
+    [bb1, bb2, self.screen] = self.img_feature()
     self.reward = self.bar1 - bb1 - self.bar2 + bb2
 
-    return self.reward, self.scree
+    return self.reward, self.screen
 
 
-  def get_observation():
+  def get_observation(self):
     return self.screen
 
 
 
 
-  def img_feature():
+  def img_feature(self):
     os.system('./capture_window.sh')
 
     img = Image.open('lf2.png')
