@@ -12,6 +12,7 @@ class simulator():
 
   def reset_game(self):
     [bb1, bb2, self.screen] = self.img_feature()
+    os.system('./reset_game.sh ')
     return
 
   def step(self,action):
