@@ -32,9 +32,13 @@ epsilon_start = 1.0
 epsilon_min = 0.1
 epsilon_decay = 1000000
 replay_memory_size = 1000000
-experiment_prefix = 'LF2'
+experiment_prefix = 'result/LF2'
 replay_start_size = 50000
 update_frequency = 4  #??
+###### 
+num_epoch = 200
+step_per_epoch = 250000
+step_per_test = 125000
 #######################
 
 class experiment():
@@ -42,17 +46,24 @@ class experiment():
     self.agent = agent
     self.env = env
 
-  #def run():
-  #  for epoch in xrange(num_epoch):
-  #    self.run_epoch()             # train
-  #    self.run_epoch()    # test
+  def run():
+    for epoch in xrange(num_epoch):
+      self.run_epoch(step_per_epoch)    # train
+      self.agent.finish_epoch(epoch+1)
 
-  #def run_epoch():
-  #  while steps_left > 0:
-  #    num_steps = self.run_episode(steps_left, testing)
+      self.agent.start_testing()
+      self.run_epoch(step_per_test)    # test
+      self.agent.finish_testing(epoch+1)
+
+  def run_epoch(num_steps):
+    steps_left = num_steps
+    while steps_left > 0:
+      num_steps = self.run_episode(steps_left)
+      steps_left -= num_steps
 
   def run_episode(self,max_steps):
     self.env.reset_game()
+    print 'initialize .. done'
     action = self.agent.start_episode(self.env.get_observation())
     #action = self.agent.start_episode(np.random.rand(200,200))
     num_steps = 0
@@ -61,8 +72,7 @@ class experiment():
       [reward, screen] = self.env.step(action)
       #reward = np.random.rand(1)
       #screen = np.random.rand(200,200)
-      #terminal = self.env.game_over()
-      terminal = False
+      terminal = self.env.game_over()
       num_steps += 1
 
       if num_steps >= max_steps:  # or terminal
@@ -89,7 +99,7 @@ def launch():
                                          update_rule,
                                          batch_accumulator,
                                          rng)
-  print 'compile network done..' , time.time()-t
+  print 'compile network .. done' , time.time()-t
   agt = agent.NeuralAgent(network,
                                   epsilon_start,
                                   epsilon_min,
@@ -100,7 +110,7 @@ def launch():
                                   update_frequency,
                                   rng)
 
-  print 'agent done..'
+  print 'create agent & simulator .. done'
   env = simulator.simulator()
   exp = experiment(agt,env)
   exp.run_episode(50)

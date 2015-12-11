@@ -11,8 +11,8 @@ class simulator():
     self.bar2 = 1
 
   def reset_game(self):
-    [bb1, bb2, self.screen] = self.img_feature()
     os.system('./reset_game.sh ')
+    [bb1, bb2, self.screen] = self.img_feature()
     return
 
   def step(self,action):
@@ -27,8 +27,6 @@ class simulator():
 
   def get_observation(self):
     return self.screen
-
-
 
 
   def img_feature(self):
